@@ -1,0 +1,19 @@
+{
+  "name": "schematicreader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chalk": "^5.0.1",
+    "extract-zip": "^2.0.1",
+    "inquirer": "^9.0.2",
+    "prismarine-schematic": "^1.2.3"
+  }
+}

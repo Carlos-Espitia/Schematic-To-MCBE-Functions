@@ -1,0 +1,3 @@
+#Function file to spawn structure aquarius
+tell @p[distance=..16] Put a command block down at the build area. In the command block, run the command "function s2cb:aquarius/spawn" in the command block. This will recreate the structure.
+tell @p[distance=..16] The structure is 97 blocks east to west, 97 blocks north to south, and 44 blocks high, and will be built starting 1 block  south  and 1 block  east  of the command block, and from the level of the command block and up.
