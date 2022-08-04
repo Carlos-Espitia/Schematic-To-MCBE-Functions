@@ -13,7 +13,7 @@ class converter {
     constructor() {
         this.extractionPath = path.resolve(`./datapacks/extraction`);
         this.dataPackPath = path.resolve(`./datapacks`);
-        this.converterPath = path.resolve(`./src/converter/schemToNBT.jar`)
+        this.converterPath = path.resolve(`./src/converter/SchemToCMD.jar`)
     }
 
     async start() {
@@ -36,9 +36,8 @@ class converter {
     async schematicToMCFunction() {
         console.log(
             chalk.yellow(
-                `1. Convert schematic to a Data Pack\n` + 
-                `2. Save the Data Pack in the "datapacks" folder\n` + 
-                `3. Exit out the program\n`
+                `1. Copy and paste data into pastedata.txt file\n` +
+                `2. Exit out program\n`
             ))
 
         console.log(chalk.redBright(`Required settings`))
@@ -47,7 +46,6 @@ class converter {
 
             `${chalk.cyan(`Enable:`)} ✅ | ${chalk.cyan(`Optional:`)} ▬ | ${chalk.cyan(`Disable:`)} ❌\n\n` +
 
-            `${chalk.blue(`Output:`)} ${chalk.bgGrey(`Data Pack`)}\n` +
             `${chalk.blue(`New Command Offset:`)} ${chalk.bgGrey(`East No Space`)}\n` +
             `${chalk.blue(`Base:`)} ${chalk.bgGrey(`NONE`)}\n` +
             `${chalk.blue(`XYZ Build Offset:`)} ▬\n\n` +
@@ -57,36 +55,30 @@ class converter {
             `${chalk.blue(`No Dangerous Blocks:`)} ▬\n` +
             `${chalk.blue(`No Monsters:`)} ✅\n` +
             `${chalk.blue(`No Mobs:`)} ✅\n` +
-            `${chalk.blue(`No Projectiles:`)} ✅\n` +
-            `${chalk.blue(`Limit Cmd Distance:`)} ❌\n` +
-            `${chalk.blue(`Server Safe:`)} ❌\n` +
             `${chalk.blue(`Remove Darriers:`)} ▬\n` +
-            `${chalk.blue(`Ignore Unneeded Block State:`)} ✅\n` +
-            `${chalk.blue(`Redstone Dots to Pulses:`)} ✅\n` +
+            `${chalk.blue(`Ignore Wire Power:`)} ✅\n` +
             `${chalk.blue(`Complex Rails:`)} ✅\n` +
             `${chalk.blue(`Min Water:`)} ✅\n` +
-            `${chalk.blue(`Min Entities:`)} ✅\n` +
-            `${chalk.blue(`Hollow Out:`)} ▬\n` +
-            `${chalk.blue(`Clone Areas:`)} ❌\n` +
-            `${chalk.blue(`Imperfect Fills:`)} ❌\n`
+            `${chalk.blue(`Min Entities:`)} ✅\n`
         )
 
-
         await exe(`start /wait ${this.converterPath}`);
-        console.clear();
-        this.convertDataPacksToMCFunctions()
-        // console.log('stdout:', stdout);
-        // console.log('stderr:', stderr);
+
+        this.convertDataToMCFunction()
     }
 
-    async convertDataPacksToMCFunctions() {
 
-        let dataPacks = fs.readdirSync('./datapacks')
-        for(var dataPack of dataPacks) {
-            // error occured or invalid format
-            const error = await this.extractDataPack(dataPack)
-            if(error) continue
-            this.createMCFunction(dataPack)
+    async convertDataToMCFunction() {
+        const data = await fs.promises.readFile(`./pasteData.txt`, { encoding: 'utf8' });
+
+        const regex = /(setblock ~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)(\w+ |\w+)(\d+|)|fill ~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)(\w+ |\w+)(\d+|))/gm
+
+        const commands = data.match(regex)
+
+        fs.writeFile('./data.mcfunction', '', () => {})
+
+        for(var command of commands) {
+            fs.appendFileSync('./data.mcfunction', `${command}\n`);
         }
 
         console.log('Press any key to exit');
@@ -96,45 +88,63 @@ class converter {
     }
 
 
-    async extractDataPack(dataPack) {
-        const extname = path.extname(dataPack);
-        if(extname != ".zip") {
-            // console.log(`Not a zip file`)
-            return true
-        }
+    // may be used for new updates
+    // async convertDataPacksToMCFunctions() {
 
-        try {
-            await extract(`${this.dataPackPath}/${dataPack}`, { dir: this.extractionPath })
-        } catch (err) {
-            console.log(err)
-            console.log(`error on extraction`)
-            return true
-        }
+    //     let dataPacks = fs.readdirSync('./datapacks')
+    //     for(var dataPack of dataPacks) {
+    //         // error occured or invalid format
+    //         const error = await this.extractDataPack(dataPack)
+    //         if(error) continue
+    //         this.createMCFunction(dataPack)
+    //     }
 
-        // console.log(`Extracted ${dataPack}`)
-        return false
-    }
+    //     console.log('Press any key to exit');
+    //     process.stdin.setRawMode(true);
+    //     process.stdin.resume();
+    //     process.stdin.on('data', process.exit.bind(process, 0));
+    // }
 
 
-    async createMCFunction(dataPack) {
-        // console.log(`Creating MCBE MCFunction for ${dataPack}`)
+    // async extractDataPack(dataPack) {
+    //     const extname = path.extname(dataPack);
+    //     if(extname != ".zip") {
+    //         // console.log(`Not a zip file`)
+    //         return true
+    //     }
 
-        // java program create folder dir with dataPackName
-        const dataPackName = path.parse(dataPack).name
-        let data;
+    //     try {
+    //         await extract(`${this.dataPackPath}/${dataPack}`, { dir: this.extractionPath })
+    //     } catch (err) {
+    //         console.log(err)
+    //         console.log(`error on extraction`)
+    //         return true
+    //     }
 
-        try {
-            data = await fs.promises.readFile(`${this.extractionPath}/data/s2cb/functions/${dataPackName}/spawn.mcfunction`, { encoding: 'utf8' });
-        } catch (err) {
-            console.log(err);
-            console.log(`error on reading NBT Data Pack`)
-            return
-        }
+    //     // console.log(`Extracted ${dataPack}`)
+    //     return false
+    // }
 
-        fs.writeFile(`./mcfunctions/${dataPackName}.mcfunction`, data.replace(/\[.+\]|{.+}/gm, ''),  {encoding: 'utf8'}, () => {
-            console.log(`${dataPackName}.mcfunction created`)
-        })
-    }
+
+    // async createMCFunction(dataPack) {
+    //     // console.log(`Creating MCBE MCFunction for ${dataPack}`)
+
+    //     // java program create folder dir with dataPackName
+    //     const dataPackName = path.parse(dataPack).name
+    //     let data;
+
+    //     try {
+    //         data = await fs.promises.readFile(`${this.extractionPath}/data/s2cb/functions/${dataPackName}/spawn.mcfunction`, { encoding: 'utf8' });
+    //     } catch (err) {
+    //         console.log(err);
+    //         console.log(`error on reading NBT Data Pack`)
+    //         return
+    //     }
+
+    //     fs.writeFile(`./mcfunctions/${dataPackName}.mcfunction`, data.replace(/\[.+\]|{.+}/gm, ''),  {encoding: 'utf8'}, () => {
+    //         console.log(`${dataPackName}.mcfunction created`)
+    //     })
+    // }
 }
 
 new converter().start()
