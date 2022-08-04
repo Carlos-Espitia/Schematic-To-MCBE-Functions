@@ -64,24 +64,58 @@ class converter {
 
         await exe(`start /wait ${this.converterPath}`);
 
-        this.convertDataToMCFunction()
+        const fileName = await inquirer.prompt({
+            name: `input`,
+            type:  `input`,
+            message: chalk.blue(`Input File Name:`)
+        })
+
+        this.convertDataToMCFunction(fileName.input)
     }
 
 
-    async convertDataToMCFunction() {
+    async convertDataToMCFunction(fileName) {
         const data = await fs.promises.readFile(`./pasteData.txt`, { encoding: 'utf8' });
-
         const regex = /(setblock ~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)(\w+ |\w+)(\d+|)|fill ~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)(\w+ |\w+)(\d+|))/gm
-
         const commands = data.match(regex)
 
-        fs.writeFile('./data.mcfunction', '', () => {})
+        let dir = fs.readdirSync('./mcfunctions')
 
-        for(var command of commands) {
-            fs.appendFileSync('./data.mcfunction', `${command}\n`);
+        // removes all files 
+        for(var file of dir) {
+            try {
+                fs.unlinkSync(`./mcfunctions/${file}`)
+            } catch(err) {
+                console.error(err)
+            }
         }
 
-        console.log('Press any key to exit');
+        let files = Math.floor(commands.length/10000)
+
+        //create main function
+        fs.writeFile(`./mcfunctions/${fileName}.mcfunction`, '', () => {})
+
+        if(files != 0) {
+
+            var fileNum = 0
+            for(var line in commands) {
+                if(line % 10000 == 0) {
+                    fileNum++ // 0 % 10000 = 0
+                    fs.appendFileSync(`./mcfunctions/${fileName}.mcfunction`, `function ${fileName}${fileNum}\n`);
+                }
+
+                fs.appendFileSync(`./mcfunctions/${fileName}${fileNum}.mcfunction`, `${commands[line]}\n`);
+            }
+
+        } else {
+            for(var command of commands) {
+                fs.appendFileSync(`./mcfunctions/${fileName}.mcfunction`, `${command}\n`);
+            }
+        }
+
+        console.clear();
+        console.log(chalk.yellow(`\nFinished converting`));
+        console.log('\nPress any key to exit');
         process.stdin.setRawMode(true);
         process.stdin.resume();
         process.stdin.on('data', process.exit.bind(process, 0));
