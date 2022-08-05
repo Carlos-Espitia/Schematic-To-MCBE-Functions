@@ -1,0 +1,2 @@
+function entangled1
+function entangled2

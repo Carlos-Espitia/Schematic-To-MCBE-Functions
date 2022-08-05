@@ -5,7 +5,11 @@ import { exec } from 'child_process'
 const exe = util.promisify(exec);
 import util from 'util';
 import path from 'path'
-import extract from 'extract-zip'
+// import extract from 'extract-zip'
+
+
+import { Schematic } from 'prismarine-schematic'
+import dialog from 'node-file-dialog'
 
 
 
@@ -24,161 +28,474 @@ class converter {
             type:  `list`,
             message: chalk.blue(`Choose a converter\n`),
             choices: [
-                `Schematic => MCFunction (MCBE)`,
-                // `NBT Pack => MCFunction (MCBE)`,
+                `Schematic => MCBEFunction latest (MCBE)`,
             ]
         })
         console.clear();
-        if(answers.selected == `Schematic => MCFunction (MCBE)`) this.schematicToMCFunction()
-        // if(answers.selected == `NBT Pack => MCFunction (MCBE)`) return
+        if(answers.selected == 'Schematic => MCBEFunction latest (MCBE)') this.schematicToMCFunction2()
     }
 
-    async schematicToMCFunction() {
-        console.log(
-            chalk.yellow(
-                `1. Copy and paste data into pastedata.txt file\n` +
-                `2. Exit out program\n`
-            ))
+    getBlockStateData(data) {
+        const newData = JSON.parse(data
+        .replaceAll(' ', '')
+        .replaceAll('[', '{')
+        .replaceAll(']', '}')
+        .replaceAll('=', ':')
+        .replaceAll(':', '":') 
+        .replaceAll(',', ',"')
+        .replaceAll('{', '{"'))
 
-        console.log(chalk.redBright(`Required settings`))
-        
-        console.log(
+        return newData
+    }
 
-            `${chalk.cyan(`Enable:`)} ✅ | ${chalk.cyan(`Optional:`)} ▬ | ${chalk.cyan(`Disable:`)} ❌\n\n` +
-
-            `${chalk.blue(`New Command Offset:`)} ${chalk.bgGrey(`East No Space`)}\n` +
-            `${chalk.blue(`Base:`)} ${chalk.bgGrey(`NONE`)}\n` +
-            `${chalk.blue(`XYZ Build Offset:`)} ▬\n\n` +
-
-            `${chalk.blue(`Quiet:`)} ▬\n` +
-            `${chalk.blue(`Clear:`)} ▬\n` +
-            `${chalk.blue(`No Dangerous Blocks:`)} ▬\n` +
-            `${chalk.blue(`No Monsters:`)} ✅\n` +
-            `${chalk.blue(`No Mobs:`)} ✅\n` +
-            `${chalk.blue(`Remove Darriers:`)} ▬\n` +
-            `${chalk.blue(`Ignore Wire Power:`)} ✅\n` +
-            `${chalk.blue(`Complex Rails:`)} ✅\n` +
-            `${chalk.blue(`Min Water:`)} ✅\n` +
-            `${chalk.blue(`Min Entities:`)} ✅\n`
-        )
-
-        await exe(`start /wait ${this.converterPath}`);
-
-        const fileName = await inquirer.prompt({
-            name: `input`,
-            type:  `input`,
-            message: chalk.blue(`Input File Name:`)
-        })
-
-        this.convertDataToMCFunction(fileName.input)
+    async javaBlockDataToBedrockBlockData() {
+        //move block data code here
     }
 
 
-    async convertDataToMCFunction(fileName) {
-        const data = await fs.promises.readFile(`./pasteData.txt`, { encoding: 'utf8' });
-        const regex = /(setblock ~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)(\w+ |\w+)(\d+|)|fill ~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)~(\d+ |\D)(\w+ |\w+)(\d+|))/gm
-        const commands = data.match(regex)
+    async schematicToMCFunction2() {
+        const config = {type:'open-files'}
 
-        let dir = fs.readdirSync('./mcfunctions')
+        var selectedFiles;
 
-        // removes all files 
-        for(var file of dir) {
-            try {
-                fs.unlinkSync(`./mcfunctions/${file}`)
-            } catch(err) {
-                console.error(err)
-            }
+        try {
+            selectedFiles = await dialog(config)
+        } catch(err) {
+            console.log(err)
+            return
         }
 
-        let files = Math.floor(commands.length/10000)
+        for(var file of selectedFiles) {
+            console.log(`Started Converting ${path.basename(file)}`)
+            const schematic = await Schematic.read(await fs.promises.readFile(file))
+            var commands = await schematic.makeWithCommands({x: '', y: '', z: ''}, 'pe') // air blocks removed modified in module
 
-        //create main function
-        fs.writeFile(`./mcfunctions/${fileName}.mcfunction`, '', () => {})
+            // craete for loop to switch all commands to valid mcbe commands
+            const placeType = /(\/setblock|\/fill)/
+            const coords = /\d+ \d+ \d+/
 
-        if(files != 0) {
+            console.log(commands.length)
 
-            var fileNum = 0
-            for(var line in commands) {
-                if(line % 10000 == 0) {
-                    fileNum++ // 0 % 10000 = 0
-                    fs.appendFileSync(`./mcfunctions/${fileName}.mcfunction`, `function ${fileName}${fileNum}\n`);
+            // converts all blocks to mcbe data blocks
+            for(var i = commands.length - 1; i >= 0; i--) {
+                const mainCommand = commands[i]
+
+                const placeType2 = mainCommand.match(placeType)[0] // 0 returns place type match
+                const coords2 = mainCommand.match(coords)[0]// 0 returns cords match
+                var blockType = mainCommand.split(' ')[4]// returns blocktype | need to create block conversion
+                var state = ` ${mainCommand.split(' ')[5]}`// returns block state
+                if(state == ' undefined' || state == undefined) state = ''
+
+                //used to check if command was updated
+                var blockTypeOld = blockType;
+                var stateOld = state;
+
+
+                
+                switch(blockType) {
+                    // case 'stone': continue
+                    // case 'iron_ore': continue
+                    // case 'coal_ore': continue
+                    // case 'gold_ore': continue
+                    // case 'diamond_ore': continue
+                    // case 'crafting_table': continue
+                    // case 'dirt': continue
+                    // case 'glass': continue
+                    // case 'prismarine': continue
+                    // case 'sea_lantern': continue
+                    // case 'enchanting_table': continue
+                    // case 'gold_block': continue
+
+                    case 'stone': {
+                        state = ''
+                        break
+                    }
+
+                    case 'iron_bars': {
+                        state = ''
+                        break
+                    }
+
+                    case 'water': {
+                        state = ''
+                        break
+                    }
+
+                    case 'fern': {
+                        blockType = 'tallgrass'
+                        state = ' 2'
+                        break
+                    }
+
+                    case 'grass': {
+                        blockType = 'tallgrass'
+                        state = ' 1'
+                        break
+                    }
+
+                    case 'grass_block': {
+                        blockType = 'grass'
+                        state = ''
+                        break
+                    }
+
+                    case 'dark_prismarine': {
+                        blockType = 'prismarine'
+                        state = ' 1'
+                        break
+                    }
+
+                    case 'oak_log': {
+                        blockType = "log"
+                        state = ' 0'
+                        break
+                    }
+
+                    case 'cobblestone_wall':{
+                        state = ' 0' 
+                        break
+                    }
+
+                    case 'oak_fence':{
+                        blockType = 'fence'
+                        state = ' 0' 
+                        break
+                    }
+
+                    case 'birch_leaves':{
+                        blockType = 'leaves'
+                        state = ' 2' //data value might be messed
+                        break
+                    }
+
+                    
+                    case 'quartz_pillar': {
+                        blockType = "quartz_block"
+                        state = ' 2'
+                        break
+                    }
+
+                    case 'stone_bricks': {
+                        blockType = "stonebrick"
+                        break
+                    }
+                    case 'mossy_stone_bricks': {
+                        blockType = "stonebrick"
+                        state = ' 1'
+                        break
+                    }
+                    case 'cracked_stone_bricks': {
+                        blockType = "stonebrick"
+                        state = ' 2'
+                        break
+                    }
+
+                    case 'diorite': {
+                        blockType = "stone"
+                        state = ' 3'
+                        break
+                    }
+                    case 'polished_diorite': {
+                        blockType = "stone"
+                        state = ' 4'
+                        break
+                    }
+                    case 'andesite': {
+                        blockType = 'stone'
+                        state = ' 5'
+                        break
+                    }
+                    case 'polished_andesite': {
+                        blockType = "stone"
+                        state = ' 6'
+                        break
+                    }
+
+                    case 'pink_glazed_terracotta': { 
+                        if(this.getBlockStateData(state).facing == 'north') state = ' 2'
+                        if(this.getBlockStateData(state).facing == 'south') state = ' 3'
+                        if(this.getBlockStateData(state).facing == 'west') state = ' 4'
+                        if(this.getBlockStateData(state).facing == 'east') state = ' 5'
+                        break
+                    }
+
+                    case 'damaged_anvil': { // can't change damage value 
+                        blockType = "anvil"
+                        if(this.getBlockStateData(state).facing == 'north') state = ' 1'
+                        if(this.getBlockStateData(state).facing == 'south') state = ' 3'
+                        if(this.getBlockStateData(state).facing == 'west') state = ' 0'
+                        if(this.getBlockStateData(state).facing == 'east') state = ' 2'
+                        break
+                    }
+
+                    case 'iron_trapdoor': {
+                        //find out how to make upside down
+                        if(this.getBlockStateData(state).facing == 'north') state = ' 2'
+                        if(this.getBlockStateData(state).facing == 'south') state = ' 3'
+                        if(this.getBlockStateData(state).facing == 'west') state = ' 0'
+                        if(this.getBlockStateData(state).facing == 'east') state = ' 1'
+                        break
+                    }
+
+                    case 'quartz_stairs': {
+                        //find out how to make upside down
+                        if(this.getBlockStateData(state).facing == 'north') state = ' 3'
+                        if(this.getBlockStateData(state).facing == 'south') state = ' 2'
+                        if(this.getBlockStateData(state).facing == 'west') state = ' 1'
+                        if(this.getBlockStateData(state).facing == 'east') state = ' 0'
+                        break
+                    }
+
+                    case 'stone_brick_stairs': {
+                        //find out how to make upside down
+                        // console.log(this.getBlockStateData(state))
+                        if(this.getBlockStateData(state).facing == 'north') state = ' 3'
+                        if(this.getBlockStateData(state).facing == 'south') state = ' 2'
+                        if(this.getBlockStateData(state).facing == 'west') state = ' 1'
+                        if(this.getBlockStateData(state).facing == 'east') state = ' 0'
+                        break
+                    }
+
+                    case 'ladder': {
+                        if(this.getBlockStateData(state).facing == 'north') state = ' 2'
+                        if(this.getBlockStateData(state).facing == 'south') state = ' 3'
+                        if(this.getBlockStateData(state).facing == 'west') state = ' 4'
+                        if(this.getBlockStateData(state).facing == 'east') state = ' 5'
+                        break
+                    }
+                    case 'furnace': {
+                        if(this.getBlockStateData(state).facing == 'north') state = ' 2'
+                        if(this.getBlockStateData(state).facing == 'south') state = ' 3'
+                        if(this.getBlockStateData(state).facing == 'west') state = ' 4'
+                        if(this.getBlockStateData(state).facing == 'east') state = ' 5'
+                        break
+                    }
+                    case 'chest': {
+                        if(this.getBlockStateData(state).facing == 'north') state = ' 2'
+                        if(this.getBlockStateData(state).facing == 'south') state = ' 3'
+                        if(this.getBlockStateData(state).facing == 'west') state = ' 4'
+                        if(this.getBlockStateData(state).facing == 'east') state = ' 5'
+                        break
+                    }
+
+                    case 'nether_brick_slab':{
+                        blockType = 'stone_block_slab'
+                        if(this.getBlockStateData(state).type == 'top') state = ' 15'
+                        if(this.getBlockStateData(state).type == 'bottom') state = ' 7'
+                        if(this.getBlockStateData(state).type == 'double') {
+                            blockType = 'double_stone_block_slab'
+                            state = ' 7'
+                        }
+                        break
+                    }
+
+                    case 'stone_brick_slab':{
+                        blockType = 'stone_block_slab'
+                        if(this.getBlockStateData(state).type == 'top') state = ' 13'
+                        if(this.getBlockStateData(state).type == 'bottom') state = ' 5'
+                        if(this.getBlockStateData(state).type == 'double') {
+                            blockType = 'double_stone_block_slab'
+                            state = ' 5'
+                        }
+                        break
+                    }
+                    case 'stone_slab':{
+                        blockType = 'stone_block_slab4'
+                        if(this.getBlockStateData(state).type == 'top') state = ' 10'
+                        if(this.getBlockStateData(state).type == 'bottom') state = ' 2'
+                        if(this.getBlockStateData(state).type == 'double') {
+                            blockType = 'double_stone_block_slab4'
+                            state = ' 2'
+                        }
+                        break
+                    }
+                }
+                //update command
+                if(blockTypeOld != blockType || stateOld != state) commands[i] = `${placeType2} ${coords2} ${blockType}${state}`
+
+            }
+
+            // convert /setblock commands to fill commands if possible
+            // redo algorithm
+
+            for (var i = commands.length - 1; i >= 0; i--) {
+                if(commands[i] == undefined) continue // block has been grouped to a fill
+                const mainCommand = commands[i]
+                const placeType2 = mainCommand.match(placeType)[0] // 0 returns place type match
+                if(placeType2 == '/fill') continue //skip fill commands
+                const coords2 = mainCommand.match(coords)[0]// 0 returns cords match
+                const xyz = coords2.split(' ') // returns xyz in list
+                var blockType = mainCommand.split(' ')[4]// returns blocktype | need to create block conversion
+                var state = ` ${mainCommand.split(' ')[5]}`// returns block state
+                if(state == ' undefined' || state == undefined) state = ''
+
+
+                // check for connected blocks in x
+                var connectedList = [] // array to create fill commands with
+                var operator = "-" // used to get both ways of xyz
+                var connected = true; // true if blocks are still connected in the process 
+                var j = 0 // connect counter 
+                var search; // used for checking match 
+                while(connected) {
+                    j++
+                    if(operator == "-") search = `/setblock ${Number(xyz[0] - j).toString()} ${xyz[1]} ${xyz[2]} ${blockType}${state}`
+                    if(operator == "+") search = `/setblock ${Number(xyz[0] + j).toString()} ${xyz[1]} ${xyz[2]} ${blockType}${state}`
+                    var index = commands.indexOf(search)
+                    if(commands[index] == undefined) {
+                        // loop again to check other side
+                        if(operator == "-") {
+                            operator = "+"
+                            j = 0
+                            continue
+                        } 
+                        connected = false
+                        // include the main command if connected blocks found
+                        if(connectedList.length != 0) {
+                            connectedList.push(mainCommand)
+                            commands.splice(commands.indexOf(mainCommand), 1);
+                        }
+                    }
+
+                    // push connected block
+                    if(commands[index] != undefined) {
+                        connectedList.push(commands[index])
+                        commands.splice(commands.indexOf(commands[index]), 1);
+                    }
+
+                    // create fill command
+                    if(connectedList.length != 0 && connected == false) { 
+                        var setBlockNumsX = []
+                        for(var cmd of connectedList) {setBlockNumsX.push(Number(cmd.split(' ')[1]))}
+                        commands.push(`/fill ${Math.min(...setBlockNumsX)} ${xyz[1]} ${xyz[2]} ${Math.max(...setBlockNumsX)} ${xyz[1]} ${xyz[2]} ${blockType}${state}`)
+                        // console.log(`/fill ${Math.min(...setBlockNumsX)} ${xyz[1]} ${xyz[2]} ${Math.max(...setBlockNumsX)} ${xyz[1]} ${xyz[2]} ${blockType}${state}`)
+                    }
                 }
 
-                fs.appendFileSync(`./mcfunctions/${fileName}${fileNum}.mcfunction`, `${commands[line]}\n`);
+                // check for connected blocks in y
+                connectedList = [] // array to create fill commands with
+                operator = "-" // used to get both ways of xyz
+                connected = true; // true if blocks are still connected in the process 
+                j = 0 // connect counter 
+                search; // used for checking match 
+                while(connected) {
+                    j++
+                    if(operator == "-") search = `/setblock ${xyz[0]} ${Number(xyz[1] - j).toString()} ${xyz[2]} ${blockType}${state}`
+                    if(operator == "+") search = `/setblock ${xyz[0]} ${Number(xyz[1] + j).toString()} ${xyz[2]} ${blockType}${state}`
+                    var index = commands.indexOf(search)
+                    if(commands[index] == undefined) {
+                        // loop again to check other side
+                        if(operator == "-") {
+                            operator = "+"
+                            j = 0
+                            continue
+                        } 
+                        connected = false
+                        // include the main command if connected blocks found
+                        if(connectedList.length != 0) {
+                            connectedList.push(mainCommand)
+                            commands.splice(commands.indexOf(mainCommand), 1);
+                        }
+                    }
+
+                    // push connected block
+                    if(commands[index] != undefined) {
+                        connectedList.push(commands[index])
+                        commands.splice(commands.indexOf(commands[index]), 1);
+                    }
+
+                    // create fill command
+                    if(connectedList.length != 0 && connected == false) { 
+                        var setBlockNumsX = []
+                        for(var cmd of connectedList) {setBlockNumsX.push(Number(cmd.split(' ')[2]))}
+                        
+                        commands.push(`/fill ${xyz[0]} ${Math.min(...setBlockNumsX)} ${xyz[2]} ${xyz[0]} ${Math.max(...setBlockNumsX)} ${xyz[2]} ${blockType}${state}`)
+                        // console.log(`/fill ${xyz[0]} ${Math.min(...setBlockNumsX)} ${xyz[2]} ${xyz[0]} ${Math.max(...setBlockNumsX)} ${xyz[2]} ${blockType}${state}`)
+                    }
+                }
+
+                // check for connected blocks in z
+                connectedList = [] // array to create fill commands with
+                operator = "-" // used to get both ways of xyz
+                connected = true; // true if blocks are still connected in the process 
+                j = 0 // connect counter 
+                search; // used for checking match 
+                while(connected) {
+                    j++
+                    if(operator == "-") search = `/setblock ${xyz[0]} ${xyz[1]} ${Number(xyz[2] - j).toString()} ${blockType}${state}`
+                    if(operator == "+") search = `/setblock ${xyz[0]} ${xyz[1]} ${Number(xyz[2] + j).toString()} ${blockType}${state}`
+                    var index = commands.indexOf(search)
+                    if(commands[index] == undefined) {
+                        // loop again to check other side
+                        if(operator == "-") {
+                            operator = "+"
+                            j = 0
+                            continue
+                        } 
+                        connected = false
+                        // include the main command if connected blocks found
+                        if(connectedList.length != 0) {
+                            connectedList.push(mainCommand)
+                            commands.splice(commands.indexOf(mainCommand), 1);
+                        }
+                    }
+
+                    // push connected block
+                    if(commands[index] != undefined) {
+                        connectedList.push(commands[index])
+                        commands.splice(commands.indexOf(commands[index]), 1);
+                    }
+
+                    // create fill command
+                    if(connectedList.length != 0 && connected == false) { 
+                        var setBlockNumsX = []
+                        for(var cmd of connectedList) {setBlockNumsX.push(Number(cmd.split(' ')[3]))}
+                        
+                        commands.push(`/fill ${xyz[0]} ${xyz[1]} ${Math.min(...setBlockNumsX)} ${xyz[0]} ${xyz[1]} ${Math.max(...setBlockNumsX)} ${blockType}${state}`)
+                        //console.log(`/fill ${xyz[0]} ${xyz[1]} ${Math.min(...setBlockNumsX)} ${xyz[0]} ${xyz[1]} ${Math.max(...setBlockNumsX)} ${blockType}${state}`)
+                    }
+                    
+                }
+
             }
 
-        } else {
-            for(var command of commands) {
-                fs.appendFileSync(`./mcfunctions/${fileName}.mcfunction`, `${command}\n`);
+            // return
+            console.log(commands.length)
+            // console.log(commands)
+            console.log(`Finished converting schematic`)
+
+            const fileName = path.parse(path.basename(file)).name
+            let files = Math.floor(commands.length/10000)
+
+
+            if(fs.existsSync(`./mcfunctions/${fileName}`)) {
+                let dir = fs.readdirSync(`./mcfunctions/${fileName}`)
+                // removes all files 
+                for(var file of dir) fs.unlinkSync(`./mcfunctions/${fileName}/${file}`)
+            } else {
+                fs.mkdirSync(`./mcfunctions/${fileName}`);
             }
+
+            //create main function
+            fs.writeFileSync(`./mcfunctions/${fileName}/${fileName}.mcfunction`, '', () => {})
+    
+            if(files != 0) {
+                var fileNum = 0
+                for(var line in commands) {
+                    if(line % 10000 == 0) {
+                        fileNum++ // 0 % 10000 = 0
+                        fs.appendFileSync(`./mcfunctions/${fileName}/${fileName}.mcfunction`, `function ${fileName}${fileNum}\n`);
+                    }
+                    fs.appendFileSync(`./mcfunctions/${fileName}/${fileName}${fileNum}.mcfunction`, `${commands[line]}\n`);
+                }
+            } else {
+                for(var command of commands) {
+                    fs.appendFileSync(`./mcfunctions/${fileName}/${fileName}.mcfunction`, `${command}\n`);
+                }
+            }
+
         }
 
-        console.clear();
-        console.log(chalk.yellow(`\nFinished converting`));
-        console.log('\nPress any key to exit');
-        process.stdin.setRawMode(true);
-        process.stdin.resume();
-        process.stdin.on('data', process.exit.bind(process, 0));
     }
-
-
-    // may be used for new updates
-    // async convertDataPacksToMCFunctions() {
-
-    //     let dataPacks = fs.readdirSync('./datapacks')
-    //     for(var dataPack of dataPacks) {
-    //         // error occured or invalid format
-    //         const error = await this.extractDataPack(dataPack)
-    //         if(error) continue
-    //         this.createMCFunction(dataPack)
-    //     }
-
-    //     console.log('Press any key to exit');
-    //     process.stdin.setRawMode(true);
-    //     process.stdin.resume();
-    //     process.stdin.on('data', process.exit.bind(process, 0));
-    // }
-
-
-    // async extractDataPack(dataPack) {
-    //     const extname = path.extname(dataPack);
-    //     if(extname != ".zip") {
-    //         // console.log(`Not a zip file`)
-    //         return true
-    //     }
-
-    //     try {
-    //         await extract(`${this.dataPackPath}/${dataPack}`, { dir: this.extractionPath })
-    //     } catch (err) {
-    //         console.log(err)
-    //         console.log(`error on extraction`)
-    //         return true
-    //     }
-
-    //     // console.log(`Extracted ${dataPack}`)
-    //     return false
-    // }
-
-
-    // async createMCFunction(dataPack) {
-    //     // console.log(`Creating MCBE MCFunction for ${dataPack}`)
-
-    //     // java program create folder dir with dataPackName
-    //     const dataPackName = path.parse(dataPack).name
-    //     let data;
-
-    //     try {
-    //         data = await fs.promises.readFile(`${this.extractionPath}/data/s2cb/functions/${dataPackName}/spawn.mcfunction`, { encoding: 'utf8' });
-    //     } catch (err) {
-    //         console.log(err);
-    //         console.log(`error on reading NBT Data Pack`)
-    //         return
-    //     }
-
-    //     fs.writeFile(`./mcfunctions/${dataPackName}.mcfunction`, data.replace(/\[.+\]|{.+}/gm, ''),  {encoding: 'utf8'}, () => {
-    //         console.log(`${dataPackName}.mcfunction created`)
-    //     })
-    // }
 }
 
 new converter().start()
