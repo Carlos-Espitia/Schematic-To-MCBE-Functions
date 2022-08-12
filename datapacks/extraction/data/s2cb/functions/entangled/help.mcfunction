@@ -1,3 +1,0 @@
-#Function file to spawn structure entangled
-tell @p[distance=..16] Put a command block down at the build area. In the command block, run the command "function s2cb:entangled/spawn" in the command block. This will recreate the structure.
-tell @p[distance=..16] The structure is 161 blocks east to west, 161 blocks north to south, and 81 blocks high, and will be built starting 1 block  south  and 1 block  east  of the command block, and from the level of the command block and up.
