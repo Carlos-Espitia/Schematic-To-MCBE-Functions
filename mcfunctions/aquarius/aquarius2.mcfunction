@@ -1,17 +1,3 @@
-fill ~43 ~9 ~55 ~43 ~9 ~56 stone
-fill ~36 ~7 ~56 ~36 ~9 ~56 stone
-fill ~36 ~9 ~39 ~36 ~9 ~56 stone
-fill ~34 ~8 ~56 ~34 ~9 ~56 stone
-fill ~62 ~6 ~55 ~62 ~9 ~55 stone
-fill ~62 ~9 ~49 ~62 ~9 ~55 stone
-fill ~60 ~5 ~55 ~60 ~9 ~55 stone
-fill ~60 ~9 ~39 ~60 ~9 ~55 stone
-fill ~57 ~9 ~55 ~58 ~9 ~55 stone
-fill ~58 ~7 ~55 ~58 ~9 ~55 stone
-fill ~35 ~8 ~55 ~35 ~9 ~55 stone
-fill ~35 ~9 ~39 ~35 ~9 ~55 stone
-fill ~59 ~7 ~54 ~59 ~9 ~54 stone
-fill ~59 ~9 ~46 ~59 ~9 ~54 stone
 fill ~56 ~9 ~54 ~57 ~9 ~54 stone
 fill ~57 ~8 ~54 ~57 ~9 ~54 stone
 fill ~34 ~9 ~49 ~34 ~9 ~54 stone
@@ -941,3 +927,17 @@ fill ~26 ~3 ~6 ~26 ~4 ~6 stone
 fill ~26 ~4 ~5 ~26 ~4 ~6 stone
 fill ~71 ~2 ~5 ~71 ~4 ~5 stone
 fill ~36 ~1 ~39 ~36 ~3 ~39 stone
+fill ~56 ~12 ~48 ~56 ~14 ~48 ladder 4
+fill ~72 ~9 ~91 ~72 ~12 ~91 ladder 2
+fill ~81 ~9 ~81 ~81 ~12 ~81 ladder 2
+fill ~91 ~9 ~72 ~91 ~12 ~72 ladder 2
+fill ~91 ~9 ~24 ~91 ~12 ~24 ladder 4
+fill ~81 ~9 ~15 ~81 ~12 ~15 ladder 4
+fill ~72 ~9 ~5 ~72 ~12 ~5 ladder 4
+fill ~48 ~12 ~40 ~48 ~14 ~40 ladder 3
+fill ~15 ~9 ~81 ~15 ~12 ~81 ladder 5
+fill ~5 ~9 ~24 ~5 ~12 ~24 ladder 3
+fill ~48 ~12 ~56 ~48 ~14 ~56 ladder 2
+fill ~5 ~9 ~72 ~5 ~12 ~72 ladder 5
+fill ~24 ~9 ~91 ~24 ~12 ~91 ladder 5
+fill ~15 ~9 ~15 ~15 ~12 ~15 ladder 3

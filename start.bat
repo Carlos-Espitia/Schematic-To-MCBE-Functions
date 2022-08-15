@@ -1,2 +1,3 @@
 cd 
-start node ./src/index.js
+call node ./src/index.js
+pause

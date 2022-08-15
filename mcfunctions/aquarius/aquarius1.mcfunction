@@ -6130,7 +6130,6 @@ fill ~24 ~11 ~57 ~24 ~14 ~57 stone
 fill ~22 ~14 ~57 ~23 ~14 ~57 dirt
 fill ~66 ~14 ~56 ~70 ~14 ~56 grass
 fill ~62 ~13 ~56 ~62 ~14 ~56 stonebrick
-fill ~48 ~12 ~56 ~48 ~14 ~56 ladder 2
 fill ~34 ~14 ~55 ~34 ~14 ~56 stonebrick
 fill ~26 ~14 ~56 ~30 ~14 ~56 grass
 fill ~30 ~14 ~52 ~30 ~14 ~56 grass
@@ -6204,7 +6203,6 @@ fill ~65 ~14 ~46 ~65 ~14 ~48 stonebrick
 fill ~63 ~10 ~48 ~63 ~14 ~48 stone
 fill ~58 ~14 ~48 ~60 ~14 ~48 stone
 fill ~57 ~12 ~48 ~57 ~14 ~48 stone 6
-fill ~56 ~12 ~48 ~56 ~14 ~48 ladder 4
 fill ~40 ~12 ~48 ~40 ~14 ~48 ladder 5
 fill ~36 ~14 ~48 ~38 ~14 ~48 stone
 fill ~33 ~10 ~48 ~33 ~14 ~48 stone
@@ -6286,7 +6284,6 @@ fill ~28 ~14 ~40 ~28 ~14 ~41 grass
 fill ~75 ~14 ~38 ~75 ~14 ~40 stone
 fill ~69 ~14 ~40 ~70 ~14 ~40 grass
 fill ~59 ~14 ~38 ~59 ~14 ~40 prismarine
-fill ~48 ~12 ~40 ~48 ~14 ~40 ladder 3
 fill ~43 ~14 ~39 ~43 ~14 ~40 stonebrick 2
 fill ~41 ~14 ~38 ~41 ~14 ~40 tallgrass 1
 fill ~37 ~14 ~38 ~37 ~14 ~40 prismarine
@@ -7315,12 +7312,10 @@ fill ~73 ~11 ~92 ~73 ~12 ~92 stonebrick
 fill ~73 ~12 ~91 ~73 ~12 ~92 stonebrick
 fill ~23 ~12 ~92 ~24 ~12 ~92 stonebrick
 fill ~24 ~9 ~92 ~24 ~12 ~92 stonebrick
-fill ~72 ~9 ~91 ~72 ~12 ~91 ladder 2
 fill ~71 ~12 ~90 ~71 ~12 ~91 stonebrick
 fill ~69 ~12 ~89 ~69 ~12 ~91 stonebrick
 fill ~27 ~12 ~89 ~27 ~12 ~91 stonebrick
 fill ~25 ~12 ~90 ~25 ~12 ~91 stonebrick
-fill ~24 ~9 ~91 ~24 ~12 ~91 ladder 5
 fill ~23 ~9 ~91 ~23 ~12 ~91 stonebrick
 fill ~73 ~12 ~90 ~74 ~12 ~90 grass
 fill ~70 ~12 ~89 ~70 ~12 ~90 stone 6
@@ -7355,7 +7350,6 @@ fill ~34 ~12 ~81 ~34 ~12 ~82 stone_block_slab
 fill ~15 ~9 ~82 ~15 ~12 ~82 stonebrick
 fill ~14 ~11 ~82 ~14 ~12 ~82 stone 3
 fill ~82 ~9 ~81 ~82 ~12 ~81 stonebrick
-fill ~81 ~9 ~81 ~81 ~12 ~81 ladder 2
 fill ~80 ~12 ~80 ~80 ~12 ~81 stonebrick
 fill ~78 ~12 ~79 ~78 ~12 ~81 stonebrick
 fill ~63 ~12 ~80 ~63 ~12 ~81 stone_block_slab
@@ -7366,7 +7360,6 @@ fill ~35 ~12 ~80 ~35 ~12 ~81 stonebrick
 fill ~33 ~12 ~80 ~33 ~12 ~81 stone_block_slab
 fill ~18 ~12 ~79 ~18 ~12 ~81 stonebrick
 fill ~16 ~12 ~80 ~16 ~12 ~81 stonebrick
-fill ~15 ~9 ~81 ~15 ~12 ~81 ladder 5
 fill ~14 ~9 ~81 ~14 ~12 ~81 stonebrick
 fill ~82 ~12 ~80 ~83 ~12 ~80 grass
 fill ~79 ~12 ~79 ~79 ~12 ~80 stone 6
@@ -7457,7 +7450,6 @@ fill ~35 ~7 ~73 ~35 ~12 ~73 stone
 fill ~35 ~12 ~66 ~35 ~12 ~73 stone
 fill ~4 ~12 ~73 ~5 ~12 ~73 stonebrick
 fill ~5 ~9 ~73 ~5 ~12 ~73 stonebrick
-fill ~91 ~9 ~72 ~91 ~12 ~72 ladder 2
 fill ~90 ~12 ~71 ~90 ~12 ~72 stonebrick
 fill ~88 ~12 ~70 ~88 ~12 ~72 stonebrick
 fill ~70 ~12 ~72 ~71 ~12 ~72 stone_block_slab
@@ -7475,7 +7467,6 @@ fill ~28 ~12 ~71 ~28 ~12 ~72 grass
 fill ~25 ~12 ~72 ~26 ~12 ~72 stone_block_slab
 fill ~8 ~12 ~70 ~8 ~12 ~72 stonebrick
 fill ~6 ~12 ~71 ~6 ~12 ~72 stonebrick
-fill ~5 ~9 ~72 ~5 ~12 ~72 ladder 5
 fill ~4 ~9 ~72 ~4 ~12 ~72 stonebrick
 fill ~92 ~12 ~71 ~93 ~12 ~71 grass
 fill ~89 ~12 ~70 ~89 ~12 ~71 stone 6
@@ -8038,7 +8029,6 @@ fill ~6 ~12 ~24 ~6 ~12 ~25 stonebrick
 fill ~3 ~12 ~25 ~4 ~12 ~25 grass
 fill ~92 ~9 ~24 ~92 ~12 ~24 stonebrick
 fill ~92 ~12 ~23 ~92 ~12 ~24 stonebrick
-fill ~91 ~9 ~24 ~91 ~12 ~24 ladder 4
 fill ~59 ~8 ~24 ~59 ~12 ~24 stone
 fill ~59 ~12 ~21 ~59 ~12 ~24 stone
 fill ~47 ~12 ~21 ~47 ~12 ~24 stone
@@ -8046,7 +8036,6 @@ fill ~37 ~9 ~24 ~37 ~12 ~24 stone
 fill ~37 ~12 ~18 ~37 ~12 ~24 stone
 fill ~35 ~8 ~24 ~35 ~12 ~24 stone
 fill ~35 ~12 ~22 ~35 ~12 ~24 stone
-fill ~5 ~9 ~24 ~5 ~12 ~24 ladder 3
 fill ~4 ~9 ~24 ~4 ~12 ~24 stonebrick
 fill ~4 ~12 ~23 ~4 ~12 ~24 stonebrick
 fill ~91 ~9 ~23 ~91 ~12 ~23 stonebrick
@@ -8118,12 +8107,10 @@ fill ~15 ~12 ~16 ~16 ~12 ~16 stonebrick
 fill ~16 ~12 ~15 ~16 ~12 ~16 stonebrick
 fill ~13 ~12 ~16 ~14 ~12 ~16 grass
 fill ~82 ~9 ~15 ~82 ~12 ~15 stonebrick
-fill ~81 ~9 ~15 ~81 ~12 ~15 ladder 4
 fill ~62 ~12 ~14 ~62 ~12 ~15 stone_block_slab
 fill ~60 ~8 ~15 ~60 ~12 ~15 stone
 fill ~36 ~9 ~15 ~36 ~12 ~15 stone
 fill ~34 ~12 ~14 ~34 ~12 ~15 stone_block_slab
-fill ~15 ~9 ~15 ~15 ~12 ~15 ladder 3
 fill ~14 ~9 ~15 ~14 ~12 ~15 stonebrick
 fill ~82 ~11 ~14 ~82 ~12 ~14 stone 3
 fill ~81 ~9 ~14 ~81 ~12 ~14 stonebrick
@@ -8167,7 +8154,6 @@ fill ~25 ~12 ~5 ~25 ~12 ~6 stonebrick
 fill ~22 ~12 ~6 ~23 ~12 ~6 grass
 fill ~73 ~9 ~5 ~73 ~12 ~5 stonebrick
 fill ~73 ~12 ~4 ~73 ~12 ~5 stonebrick
-fill ~72 ~9 ~5 ~72 ~12 ~5 ladder 4
 fill ~24 ~9 ~5 ~24 ~12 ~5 ladder 3
 fill ~23 ~9 ~5 ~23 ~12 ~5 stonebrick
 fill ~23 ~12 ~4 ~23 ~12 ~5 stonebrick
@@ -9998,3 +9984,17 @@ fill ~61 ~9 ~49 ~61 ~9 ~56 stone
 fill ~58 ~9 ~56 ~59 ~9 ~56 stone
 fill ~59 ~4 ~56 ~59 ~9 ~56 stone
 fill ~53 ~9 ~55 ~53 ~9 ~56 stone
+fill ~43 ~9 ~55 ~43 ~9 ~56 stone
+fill ~36 ~7 ~56 ~36 ~9 ~56 stone
+fill ~36 ~9 ~39 ~36 ~9 ~56 stone
+fill ~34 ~8 ~56 ~34 ~9 ~56 stone
+fill ~62 ~6 ~55 ~62 ~9 ~55 stone
+fill ~62 ~9 ~49 ~62 ~9 ~55 stone
+fill ~60 ~5 ~55 ~60 ~9 ~55 stone
+fill ~60 ~9 ~39 ~60 ~9 ~55 stone
+fill ~57 ~9 ~55 ~58 ~9 ~55 stone
+fill ~58 ~7 ~55 ~58 ~9 ~55 stone
+fill ~35 ~8 ~55 ~35 ~9 ~55 stone
+fill ~35 ~9 ~39 ~35 ~9 ~55 stone
+fill ~59 ~7 ~54 ~59 ~9 ~54 stone
+fill ~59 ~9 ~46 ~59 ~9 ~54 stone
