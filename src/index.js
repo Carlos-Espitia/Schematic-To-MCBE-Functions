@@ -851,7 +851,7 @@ class converter {
             }
 
             //removes / and adds relative to player coords
-            for(var i = commands.length - 1; i >= 0; i--) commands[i] = commands[i].replace('/', ``).replace(/(\b\d+\b )/g, `~$1`)
+            for(var i = commands.length - 1; i >= 0; i--) commands[i] = commands[i].replace('/', ``).replace(/(-\b\d+\b |\d+\b )/g, `~$1`)
 
             // info
             for(var blockTranslation of this.missingBlockTranslations) console.log(`${warning} ${blockTranslation}`)
